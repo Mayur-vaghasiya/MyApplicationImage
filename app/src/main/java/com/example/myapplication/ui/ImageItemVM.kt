@@ -2,6 +2,7 @@ package com.example.myapplication.ui
 
 import android.app.Application
 import android.widget.Toast
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.myapplication.model.ItemImageResponse
 import com.example.myapplication.network.ApiInterface
@@ -14,8 +15,11 @@ import retrofit2.Response
 
 class ImageItemVM (application: Application) : BaseViewModel<ImageItemNavigator>(application)  {
 
-    var itemImageList: MutableLiveData<ItemImageResponse.Data.User> = MutableLiveData()
+    var itemImageList: MutableLiveData<ArrayList<ItemImageResponse.Data.User>> = MutableLiveData()
     var service: ApiInterface? = null
+
+
+
    fun GetItemsImageList(offset:Int,limit:Int){
        service = RetrofitInstance.getRetrofitInstance()!!.create(ApiInterface::class.java)
        val call: Call<ItemImageResponse.Data>? = service?.getItemImage(offset,limit)
@@ -23,7 +27,7 @@ class ImageItemVM (application: Application) : BaseViewModel<ImageItemNavigator>
        call?.enqueue(object : Callback<ItemImageResponse.Data> {
            override fun onResponse(call: Call<ItemImageResponse.Data>, response: Response<ItemImageResponse.Data>) {
 
-               itemImageList = response.body()?.users as MutableLiveData<ItemImageResponse.Data.User>
+               itemImageList.value=response.body()?.users
            }
 
            override fun onFailure(call: Call<ItemImageResponse.Data>, t: Throwable) {

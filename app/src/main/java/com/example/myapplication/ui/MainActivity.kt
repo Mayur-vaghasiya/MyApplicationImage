@@ -2,6 +2,7 @@ package com.example.myapplication.ui
 
 
 import android.os.Bundle
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.myapplication.BR
@@ -12,17 +13,21 @@ import com.example.myapplication.model.ItemImageResponse
 import com.example.myapplication.ui.base.BaseActivity
 
 
-class MainActivity : BaseActivity<ActivityMainBinding, ImageItemVM>(),ImageItemNavigator {
+class MainActivity : BaseActivity<ActivityMainBinding, ImageItemVM>(), ImageItemNavigator {
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var imageItemVM: ImageItemVM
     private lateinit var itemImageAdapter: ItemImageAdapter
-    private lateinit var itemList:ArrayList<ItemImageResponse.Data>
+    private lateinit var itemImageList: ArrayList<ItemImageResponse.Data.User>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setDefaultValues()
         setHeader()
-        imageItemVM.GetItemsImageList(0,10)
+        imageItemVM.GetItemsImageList(0, 10)
+        imageItemVM.itemImageList.observe(this, Observer { itemlist ->
+            itemImageList = itemlist
+        })
+        setPartnerRecyclerView()
     }
 
     private fun setPartnerRecyclerView() {
@@ -30,13 +35,15 @@ class MainActivity : BaseActivity<ActivityMainBinding, ImageItemVM>(),ImageItemN
 
         itemImageAdapter = ItemImageAdapter(
             this,
-            itemList)
+            itemImageList
+        )
         binding.recyclerViewItem.apply {
             this.layoutManager = layoutManager
             this.adapter = itemImageAdapter
 
         }
     }
+
     private fun setDefaultValues() {
         binding = getViewDataBinding()
         binding.let {

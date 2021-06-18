@@ -11,9 +11,9 @@ import com.example.myapplication.databinding.RowItemimageBinding
 import com.example.myapplication.model.ItemImageResponse
 
 
-class ItemImageAdapter(private val context: Context, userList: ArrayList<ItemImageResponse.Data>) :
+class ItemImageAdapter(private val context: Context, userList: ArrayList<ItemImageResponse.Data.User>) :
     RecyclerView.Adapter<ItemImageAdapter.MyViewHolder>() {
-    private val userList: ArrayList<ItemImageResponse.Data> = userList
+    private val userList: ArrayList<ItemImageResponse.Data.User> = userList
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
@@ -29,7 +29,7 @@ class ItemImageAdapter(private val context: Context, userList: ArrayList<ItemIma
 
     override fun onBindViewHolder(holder: ItemImageAdapter.MyViewHolder, position: Int) {
 
-        Glide.with(context).load(userList.get(position).users?.get(position)?.items?.get(position)).into(holder.bind.imageViewItem)
+        Glide.with(context).load(userList.get(position).items?.get(position)).into(holder.bind.imageViewItem)
     }
 
     override fun getItemCount(): Int {
