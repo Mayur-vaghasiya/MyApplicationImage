@@ -7,7 +7,7 @@ import retrofit2.http.Query
 
 interface ApiInterface {
 
-    @GET("user")
+    @GET("users")
     fun getItemImage(
         @Query("offset") offset: Int,
         @Query("limit") limit: Int,
